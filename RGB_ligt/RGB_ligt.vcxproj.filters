@@ -15,7 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="RGB_ligt.ino" />
+    <ClInclude Include="__vm\.RGB_ligt.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
- 
+  <ItemGroup>
+    <None Include="Source.ino" />
+  </ItemGroup>
 </Project>
