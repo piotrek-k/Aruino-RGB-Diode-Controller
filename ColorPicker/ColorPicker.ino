@@ -1,12 +1,8 @@
-class RGB;
-
-class HSL;
-
 #define GREEN 9
 #define BLUE 5
 #define RED 6
 #define POTENTIOMETER A5
-#define BUTTON 7
+#define BUTTON 3
 #define delayTime 20
 
 void setup()
@@ -14,14 +10,14 @@ void setup()
 	pinMode(GREEN, OUTPUT);
 	pinMode(BLUE, OUTPUT);
 	pinMode(RED, OUTPUT);
-	pinMode(BUTTON, INPUT_PULLUP);
+	pinMode(BUTTON, INPUT);
 	digitalWrite(GREEN, HIGH);
 	digitalWrite(BLUE, HIGH);
 	digitalWrite(RED, HIGH);
 	Serial.begin(9600);
+
+	Serial.println("START");
 }
-
-
 
 class HSL
 {
@@ -42,7 +38,6 @@ public:
 		return (H == hsl.H) && (S == hsl.S) && (L == hsl.L);
 	}
 };
-
 
 class RGB
 {
@@ -108,47 +103,71 @@ float HueToRGB(float v1, float v2, float vH) {
 	return v1;
 }
 
-
-
 int redVal;
 int blueVal;
 int greenVal;
 
 int whatToChange = 0;
-HSL chosenColor = HSL(0, 0.0f, 0.0f);
+HSL chosenColor = HSL(0, 1.0f, 0.5f);
 
 void loop()
 {
-	int pValue = analogRead(A5);
+	int pValue = analogRead(POTENTIOMETER);
+	Serial.println(digitalRead(BUTTON));
+	//if (digitalRead(BUTTON) == 1) {
+	//	//Serial.println("btn pressed");
+	//	whatToChange++;
+	//	if (whatToChange > 2) {
+	//		whatToChange = 0;
+	//	}
+	//	delay(1000);
+	//}
+	//else {
+	//	//Serial.println("btn not pressed");
+	//}
 
-	if (digitalRead(BUTTON) == LOW) {
-		whatToChange++;
-		if (whatToChange > 2) {
-			whatToChange = 0;
-		}
-		delay(1000);
-	}
-
-	if (whatToChange == 0) {
-		chosenColor.H = 360 * ((pValue + 1) / 1024);
+	/*if (whatToChange == 0) {
+		
+		chosenColor.H = 360 * ((pValue + 1) / (float)1024);
 	}
 	else if (whatToChange == 1) {
-		chosenColor.S = 100 * ((pValue + 1) / 1024);
+		chosenColor.S = 1 * ((pValue + 1) / (float)1024);
 	}
 	else if (whatToChange == 2) {
-		chosenColor.L = 100 * ((pValue + 1) / 1024);
-	}
-	//int[] colors = hslToRgb(2, 2, 2);
-	HSL data = HSL(138, 0.50f, 0.76f);
-	RGB value = value.HSLToRGB(data);
+		chosenColor.L = 1 * ((pValue + 1) / (float)1024);
+	}*/
 
-	Serial.println("whatToChange" + whatToChange);
-	Serial.println("pValue" + pValue);
-	Serial.println("value.R" + value.R);
-	Serial.println("value.G" + value.G);
-	Serial.println("value.B" + value.B);
+	chosenColor.H = 360 * ((pValue + 1) / (float)1024);
 
-	/*analogWrite(RED, rgb.r);
-	analogWrite(GREEN, rgb.g);
-	analogWrite(BLUE, rgb.b);*/
+	RGB value = value.HSLToRGB(chosenColor);
+
+	/*Serial.print("whatToChange :");
+	Serial.print(whatToChange);
+	Serial.print("\n");*/
+
+	/*Serial.print("pValue :");
+	Serial.print(pValue);
+	Serial.print("\n");
+
+	Serial.print("chosenColor.H :");
+	Serial.print(chosenColor.H);
+	Serial.print("\n");
+
+	Serial.print("value.R :");
+	Serial.print(value.R);
+	Serial.print("\n");
+
+	Serial.print("value.G :");
+	Serial.print(value.G);
+	Serial.print("\n");
+
+	Serial.print("value.B :");
+	Serial.print(value.B);
+	Serial.print("\n");*/
+
+	//delay(1000);
+
+	analogWrite(RED, value.R);
+	analogWrite(GREEN, value.G);
+	analogWrite(BLUE, value.B);
 }
